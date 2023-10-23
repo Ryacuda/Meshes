@@ -4,19 +4,16 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
-public class Sphere : MonoBehaviour
+public class Sphere
 {
-	[SerializeField] private Material mat;
-    [SerializeField] private int n_longitudes = 15;
-    [SerializeField] private int n_latitudes = 6;
-    [SerializeField] private float radius = 2;
+	public Mesh mesh;
+    private int n_longitudes = 15;
+    private int n_latitudes = 6;
+    private float radius = 2;
 
     // Start is called before the first frame update
-    void Start()
+    public Sphere()
 	{
-		gameObject.AddComponent<MeshFilter>();
-		gameObject.AddComponent<MeshRenderer>();
-
 		Vector3[] vertices = new Vector3[n_longitudes  * (n_latitudes + 1) +2];
 		int[] triangles = new int[(n_latitudes+1) * n_longitudes * 6];
 
@@ -77,18 +74,9 @@ public class Sphere : MonoBehaviour
             triangles[ind++] = v_south;
         }
 
-		Mesh msh = new Mesh();
+		mesh = new Mesh();
 
-		msh.vertices = vertices;
-		msh.triangles = triangles;
-
-		gameObject.GetComponent<MeshFilter>().mesh = msh;
-		gameObject.GetComponent<MeshRenderer>().material = mat;
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
 	}
 }

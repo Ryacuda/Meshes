@@ -19,9 +19,15 @@ public class MeshLoader : MonoBehaviour
 		gameObject.AddComponent<MeshFilter>();
 		gameObject.AddComponent<MeshRenderer>();
 
-		ReadOFFFile("Assets/TD2/buddha.off");
+		//ReadOFFFile("Assets/TD2/triceratops.off");
 
-		if(center)
+		Tiling t = new Tiling();
+		mesh = t.mesh;
+
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
+        gameObject.GetComponent<MeshRenderer>().material = material;
+
+        if (center)
 		{
 			CenterVertices();
 		}
@@ -35,6 +41,7 @@ public class MeshLoader : MonoBehaviour
 
 		PropertiesLog("Assets/TD2/plog.txt");
 
+		Write("tiles.off");
         //WriteHalf("Assets/TD2/bdh.off");
     }
 
@@ -104,9 +111,6 @@ public class MeshLoader : MonoBehaviour
 
 		mesh.vertices = vertices;
 		mesh.triangles = triangles;
-
-		gameObject.GetComponent<MeshFilter>().mesh = mesh;
-		gameObject.GetComponent<MeshRenderer>().material = material;
 	}
 
 	public void CenterVertices()
@@ -182,9 +186,33 @@ public class MeshLoader : MonoBehaviour
 		sw.Close();
 	}
 
-	public void PropertiesLog(string path)
+    public void Write(string path)
+    {
+        StreamWriter sw = new StreamWriter(path);
+
+        sw.WriteLine("OFF");
+        sw.WriteLine((mesh.vertices.Length).ToString() + " " + (mesh.triangles.Length / 3).ToString() + " 0");
+
+        for (int i = 0; i < mesh.vertices.Length; i++)
+        {
+            Vector3 p = mesh.vertices[i];
+            sw.WriteLine(p.x.ToString(CultureInfo.InvariantCulture) + " " + p.y.ToString(CultureInfo.InvariantCulture) + " " + p.z.ToString(CultureInfo.InvariantCulture));
+        }
+
+        for (int i = 0; i < mesh.triangles.Length / 3; i++)
+        {
+            sw.WriteLine("3 " + mesh.triangles[3 * i] + " " + mesh.triangles[3 * i + 1] + " " + mesh.triangles[3 * i + 2]);
+        }
+
+        sw.Close();
+    }
+
+    public void PropertiesLog(string path)
 	{
 		Dictionary<Vector2Int, int> edge_count = new Dictionary<Vector2Int, int>();
+		//List<int> vertex_count = new List<int>();
+		//vertex_count.Capacity = mesh.vertices.Length;
+
 		for(int i = 0; i < mesh.triangles.Length/3; i++)
 		{
 			int a = mesh.triangles[3 * i];
@@ -211,6 +239,7 @@ public class MeshLoader : MonoBehaviour
             Vector2Int e2 = new Vector2Int(b, c);
             Vector2Int e3 = new Vector2Int(a, c);
 
+			// increment edge count
             int val = 0;
 			edge_count.TryGetValue(e1, out val);
 			edge_count[e1] = val + 1;
@@ -222,16 +251,24 @@ public class MeshLoader : MonoBehaviour
             val = 0;
             edge_count.TryGetValue(e3, out val);
             edge_count[e3] = val + 1;
+
+			// increment vertex count
         }
 
 		int min_shared_edge = edge_count.OrderBy(e => e.Value).First().Value;
         int max_shared_edge = edge_count.OrderBy(e => e.Value).Last().Value;
 
+		//int min_shared_vertex = vertex_count.OrderBy(v => v.Value).First().Value;
+		//int max_shared_vertex = vertex_count.OrderBy(v => v.Value).First().Value;
+
         StreamWriter sw = new StreamWriter(path);
 
 		sw.WriteLine("Number of vertices/edges/faces : " + mesh.vertices.Length.ToString(CultureInfo.InvariantCulture) + "\t" + edge_count.Count.ToString(CultureInfo.InvariantCulture) + "\t" + (mesh.triangles.Length/3).ToString(CultureInfo.InvariantCulture));
-		sw.WriteLine("Number of edges shared by a face is at least " + min_shared_edge.ToString(CultureInfo.InvariantCulture) + " and up to " + max_shared_edge.ToString(CultureInfo.InvariantCulture));
 
-		sw.Close();
+        sw.WriteLine("\n\t\t\t\t\tmin\t\tmax");
+        sw.WriteLine("Shared edges :\t\t" + min_shared_edge.ToString(CultureInfo.InvariantCulture) + "\t\t" + max_shared_edge.ToString(CultureInfo.InvariantCulture));
+        //sw.WriteLine("Shared vertices :\t" + min_shared_vertex.ToString(CultureInfo.InvariantCulture) + "\t\t" + max_shared_vertex.ToString(CultureInfo.InvariantCulture));
+
+        sw.Close();
     }
 }

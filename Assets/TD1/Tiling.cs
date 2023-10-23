@@ -2,21 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tiling : MonoBehaviour
+public class Tiling
 {
-	public Material mat;
+	public Mesh mesh;
 
 	// Start is called before the first frame update
-	void Start()
+	public Tiling()
 	{
 		int w = 5;
 		int h = 6;
 
 		float cell_width = 0.5f;
 		float cell_height = 0.6f;
-
-		gameObject.AddComponent<MeshFilter>();
-		gameObject.AddComponent<MeshRenderer>();
 
 		Vector3[] vertices = new Vector3[(w+1) * (h+1)];
 		int[] triangles = new int[h * w * 6];
@@ -49,19 +46,10 @@ public class Tiling : MonoBehaviour
 				triangles[ind + 5] = v2;
 			}
 		}
-
-		Mesh msh = new Mesh();
-
-		msh.vertices = vertices;
-		msh.triangles = triangles;
-
-		gameObject.GetComponent<MeshFilter>().mesh = msh;
-		gameObject.GetComponent<MeshRenderer>().material = mat;
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
 		
+		mesh = new Mesh();
+
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
 	}
 }

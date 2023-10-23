@@ -1,2 +1,4 @@
-Number of vertices/edges/faces : 13295	35341	26999
-Number of edges shared by a face is at least 1 and up to 8
+Number of vertices/edges/faces : 42	96	60
+
+					min		max
+Shared edges :		1		2

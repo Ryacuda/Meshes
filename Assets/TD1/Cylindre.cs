@@ -2,19 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cylindre : MonoBehaviour
+public class Cylindre
 {
-	public Material mat;
+	public Mesh mesh;
 
 	// Start is called before the first frame update
-	void Start()
+	public Cylindre()
 	{
 		int n = 20;
 		float h = 2;
 		float r = 3 ;
-
-		gameObject.AddComponent<MeshFilter>();
-		gameObject.AddComponent<MeshRenderer>();
 
 		Vector3[] vertices = new Vector3[n * 2];
 		int[] triangles = new int[24 * (n-1)];
@@ -64,18 +61,9 @@ public class Cylindre : MonoBehaviour
 			triangles[offset + i * 6 + 5] = v3;
 		}
 
-		Mesh msh = new Mesh();
+		mesh = new Mesh();
 
-		msh.vertices = vertices;
-		msh.triangles = triangles;
-
-		gameObject.GetComponent<MeshFilter>().mesh = msh;
-		gameObject.GetComponent<MeshRenderer>().material = mat;
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
 	}
 }
