@@ -1,4 +1,4 @@
-Number of vertices/edges/faces : 42	96	60
+Number of vertices/edges/faces : 1000	2752	1996
 
 					min		max
-Shared edges :		1		2
+Shared edges :		1		5

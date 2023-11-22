@@ -11,6 +11,7 @@ public class MeshLoader : MonoBehaviour
 	[SerializeField] private Material material;
 	[SerializeField] private bool center;
 	[SerializeField] private bool normalize;
+	[SerializeField] private string mesh_file;
 	private Mesh mesh;
 
 	// Start is called before the first frame update
@@ -19,10 +20,7 @@ public class MeshLoader : MonoBehaviour
 		gameObject.AddComponent<MeshFilter>();
 		gameObject.AddComponent<MeshRenderer>();
 
-		//ReadOFFFile("Assets/TD2/triceratops.off");
-
-		Tiling t = new Tiling();
-		mesh = t.mesh;
+		ReadOFFFile("Assets/TD2/" + mesh_file + ".off");
 
         gameObject.GetComponent<MeshFilter>().mesh = mesh;
         gameObject.GetComponent<MeshRenderer>().material = material;

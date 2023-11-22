@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Cone
+public class Cone : MonoBehaviour
 {
-    public Mesh mesh;
-    private int n = 4;
-    private float radius = 2;
-    private float hauteur = 2;
+    [SerializeField] private Material mat;
+    [SerializeField] private int n = 4;
+    [SerializeField] private float radius = 2;
+    [SerializeField] private float hauteur = 2;
 
 
     // Start is called before the first frame update
-    public Cone()
+    void Start()
     {
+        gameObject.AddComponent<MeshFilter>();
+        gameObject.AddComponent<MeshRenderer>();
+
         Vector3[] vertices = new Vector3[2 * n - 1];
         int[] triangles = new int[6*(n-1)];
 
@@ -55,9 +59,11 @@ public class Cone
             triangles[ind++] = v2;
         }
 
-        mesh = new Mesh();
+        Mesh m = new Mesh();
+        m.vertices = vertices;
+        m.triangles = triangles;
 
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
+        gameObject.GetComponent<MeshFilter>().mesh = m;
+        gameObject.GetComponent<MeshRenderer>().material = mat;
     }
 }

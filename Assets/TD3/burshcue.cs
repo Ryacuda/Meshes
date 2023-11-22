@@ -18,13 +18,4 @@ public class burshcue : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.tag);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("e");
-    }
 }

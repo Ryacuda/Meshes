@@ -14,7 +14,7 @@ public class bursh : MonoBehaviour
     {
         instance_grid = GetComponent<Grid>();
 
-        sphere = new MySphere(3, Vector3.zero);
+        sphere = new MySphere(6, Vector3.zero);
 
         BoundingBox bb = sphere.GetBoundingBox();
 
